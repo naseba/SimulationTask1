@@ -7,6 +7,14 @@
         mc:Ignorable="d"
         Title="WelcomeScreen" Height="450" Width="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.3*"/>
+        </Grid.RowDefinitions>
         <Label Content="Welcome to our Simulated Queue ;)"/>
     </Grid>
 </Window>

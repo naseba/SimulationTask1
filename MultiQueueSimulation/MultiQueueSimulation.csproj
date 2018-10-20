@@ -62,6 +62,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ViewModels\WelcomeScreenViewModel.cs" />
     <Compile Include="Views\WelcomeScreen.xaml.cs">
       <DependentUpon>WelcomeScreen.xaml</DependentUpon>
     </Compile>
@@ -102,9 +103,7 @@
     <Resource Include="TestCases\ReadMe.txt" />
     <Resource Include="TestCases\TestCase1.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Views\WelcomeScreen.xaml">
       <SubType>Designer</SubType>
