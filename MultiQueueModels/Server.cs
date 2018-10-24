@@ -18,6 +18,8 @@ namespace MultiQueueModels
         public decimal AverageServiceTime { get; set; } 
         public decimal Utilization { get; set; }
 
+        public bool availabel { get; set; }
+
         public List<TimeDistribution> TimeDistribution;
 
         //optional if needed use them
