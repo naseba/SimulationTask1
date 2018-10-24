@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MultiQueueTesting">
-      <HintPath>X:\Downloads\Template\Testing dll\MultiQueueTesting.dll</HintPath>
+      <HintPath>..\MultiQueueTesting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -101,16 +101,18 @@
       <Name>MultiQueueModels</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="TestCases\ReadMe.txt" />
-    <Resource Include="TestCases\TestCase1.txt" />
-  </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Page Include="Views\WelcomeScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TestCases\ReadMe.txt" />
+    <Resource Include="TestCases\TestCase1.txt" />
+    <Resource Include="TestCases\TestCase2.txt" />
+    <Resource Include="TestCases\TestCase3.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
