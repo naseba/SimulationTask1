@@ -31,7 +31,24 @@ namespace MultiQueueSimulation.ViewModels
         {
             //Fill Exsisting Files
             //App.InterarrivalDistribution = ReadFromFile(ExistingFiles[0]);
+            App.SimulationSystem.Servers.ForEach(x => 
+            {
+                AddCumulativeProbability(x.TimeDistribution);
+                AddRange(x.TimeDistribution);
+            });
         }
+        async Task StartSimulation()
+        {
+            //int rand  = //Ali function;
+        }
+        int GetArrivalTime(int rand)
+        {
+            if (rand >=App.SimulationSystem.InterarrivalDistribution.[] )
+            {
+
+            }
+        }
+
         //async Task PopulateSystem()
         //{
         //    //ReadFromFile();
