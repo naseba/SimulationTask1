@@ -31,7 +31,7 @@ namespace MultiQueueSimulation.ViewModels
         {
             //Fill Exsisting Files
             //App.InterarrivalDistribution = ReadFromFile(ExistingFiles[0]);
-            App.SimulationSystem.Servers.ForEach(x => 
+            App.SimulationSystem.Servers.ForEach(x =>
             {
                 AddCumulativeProbability(x.TimeDistribution);
                 AddRange(x.TimeDistribution);
@@ -39,14 +39,21 @@ namespace MultiQueueSimulation.ViewModels
         }
         async Task StartSimulation()
         {
-            //int rand  = //Ali function;
+            int LowestNumber = App.SimulationSystem.InterarrivalDistribution[0].MinRange;
+            int HighestNumber = App.SimulationSystem.InterarrivalDistribution[App.SimulationSystem.InterarrivalDistribution.Count-1].MaxRange;
+            int rand = App.GeneralRandomFunction(LowestNumber,HighestNumber);
+            
         }
         int GetArrivalTime(int rand)
         {
-            if (rand >=App.SimulationSystem.InterarrivalDistribution.[] )
+            foreach (var item in App.InterarrivalDistribution)
             {
-
+                if (rand >= item.MinRange && rand <= item.MaxRange)
+                {
+                    return item.Time;
+                }
             }
+            return 0;
         }
 
         //async Task PopulateSystem()
