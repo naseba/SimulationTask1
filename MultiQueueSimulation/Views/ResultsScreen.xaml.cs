@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MultiQueueSimulation.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace MultiQueueSimulation.Views
         public ResultsScreen()
         {
             InitializeComponent();
+            DataContext = new ResultsViewModel();
         }
     }
 }

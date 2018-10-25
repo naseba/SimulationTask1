@@ -20,7 +20,6 @@ namespace MultiQueueSimulation.Views
     /// </summary>
     public partial class WelcomeScreen : Window
     {
-        WelcomeScreenViewModel vm;
         public WelcomeScreen()
         {
             InitializeComponent();

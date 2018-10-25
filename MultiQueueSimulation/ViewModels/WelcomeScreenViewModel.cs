@@ -1,4 +1,5 @@
-﻿using MultiQueueSimulation.ViewModels.Base;
+﻿using MultiQueueModels;
+using MultiQueueSimulation.ViewModels.Base;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -31,9 +32,22 @@ namespace MultiQueueSimulation.ViewModels
             //Fill Exsisting Files
             //App.InterarrivalDistribution = ReadFromFile(ExistingFiles[0]);
         }
-
+        //async Task PopulateSystem()
+        //{
+        //    //ReadFromFile();
+        //    foreach (var item in App.SimulationSystem.InterarrivalDistribution)
+        //    {
+        //        AddCumulativeProbability(item);
+        //        AddRange();
+        //    }
+        //}
         #region Creating  Distributions 
-        //public List<TimeDistribution> ReadFromFile(string FileName)
+
+        //*It should be Void with no parameters and Edits ( " App.SimulationSystem " )*
+
+        // you will find all the needed attributes there 
+
+        //public void ReadFromFile()
         //{
         //    FileName += ".txt";
         //    string record;
@@ -66,26 +80,26 @@ namespace MultiQueueSimulation.ViewModels
 
         //    return InterarrivalDistribution;
         //} 
-        public void AddCumulativeProbability()
+        public void AddCumulativeProbability(List<TimeDistribution> TimeDistribution)
         {
-            App.InterarrivalDistribution[0].CummProbability = App.InterarrivalDistribution[0].Probability;
+            TimeDistribution[0].CummProbability = TimeDistribution[0].Probability;
 
-            for (int i = 1; i < App.InterarrivalDistribution.Count; i++)
+            for (int i = 1; i < TimeDistribution.Count; i++)
             {
-                App.InterarrivalDistribution[i].CummProbability = App.InterarrivalDistribution[i].Probability + App.InterarrivalDistribution[i - 1].CummProbability;
+                TimeDistribution[i].CummProbability = TimeDistribution[i].Probability + TimeDistribution[i - 1].CummProbability;
             }
         }
-        public void AddRange()
+        public void AddRange(List<TimeDistribution> TimeDistribution)
         {
-            App.InterarrivalDistribution[0].MinRange = 1;
+            TimeDistribution[0].MinRange = 1;
 
-            for (int i = 0; i < App.InterarrivalDistribution.Count; i++)
+            for (int i = 0; i < TimeDistribution.Count; i++)
             {
-                App.InterarrivalDistribution[i].MaxRange = (int)((App.InterarrivalDistribution[i].CummProbability) * 100);
+                TimeDistribution[i].MaxRange = (int)((TimeDistribution[i].CummProbability) * 100);
             }
-            for (int i = 1; i < App.InterarrivalDistribution.Count; i++)
+            for (int i = 1; i < TimeDistribution.Count; i++)
             {
-                App.InterarrivalDistribution[i].MinRange = (App.InterarrivalDistribution[i - 1].MaxRange + 1);
+                TimeDistribution[i].MinRange = (TimeDistribution[i - 1].MaxRange + 1);
             }
         }
         #endregion
