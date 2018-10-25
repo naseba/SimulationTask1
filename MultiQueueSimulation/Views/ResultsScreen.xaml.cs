@@ -16,14 +16,14 @@ using System.Windows.Shapes;
 namespace MultiQueueSimulation.Views
 {
     /// <summary>
-    /// Interaction logic for WelcomeScreen.xaml
+    /// Interaction logic for ResultsScreen.xaml
     /// </summary>
-    public partial class WelcomeScreen : Window
+    public partial class ResultsScreen : Window
     {
-        public WelcomeScreen()
+        public ResultsScreen()
         {
             InitializeComponent();
-            DataContext = new WelcomeScreenViewModel();
+            DataContext = new ResultsViewModel();
         }
     }
 }

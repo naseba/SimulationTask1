@@ -35,8 +35,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="De.TorstenMandelkow.MetroChart, Version=0.9.5818.20693, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ModernUICharts.WPF.Beta.0.9.1\lib\De.TorstenMandelkow.MetroChart.dll</HintPath>
+    </Reference>
     <Reference Include="MultiQueueTesting">
-      <HintPath>..\..\..\..\Projects\College\MultiQueueSimulation\MultiQueueTesting.dll</HintPath>
+      <HintPath>..\MultiQueueTesting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -62,10 +65,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\Command.cs" />
     <Compile Include="ResultsViewModels\ResultsViewModels.cs" />
-    <Compile Include="ViewModels\ReadFile.cs" />
+    <Compile Include="ViewModels\Base\CommandHandler.cs" />
+    <Compile Include="ViewModels\ResultsViewModel.cs" />
     <Compile Include="ViewModels\WelcomeScreenViewModel.cs" />
+    <Compile Include="Views\ResultsScreen.xaml.cs">
+      <DependentUpon>ResultsScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WelcomeScreen.xaml.cs">
       <DependentUpon>WelcomeScreen.xaml</DependentUpon>
     </Compile>
@@ -88,6 +94,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -102,19 +109,22 @@
       <Name>MultiQueueModels</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Resource Include="TestCases\ReadMe.txt" />
-    <Resource Include="TestCases\TestCase1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="TestCases\TestCase2.txt" />
-    <Resource Include="TestCases\TestCase3.txt" />
-  </ItemGroup>
-  <ItemGroup>
+    <Page Include="Views\ResultsScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\WelcomeScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TestCases\ReadMe.txt" />
+    <Resource Include="TestCases\TestCase1.txt" />
+    <Resource Include="TestCases\TestCase2.txt" />
+    <Resource Include="TestCases\TestCase3.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

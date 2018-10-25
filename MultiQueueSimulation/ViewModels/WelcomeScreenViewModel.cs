@@ -1,50 +1,129 @@
 ﻿using MultiQueueModels;
-using MultiQueueSimulation.Helpers;
-using System;
+using MultiQueueSimulation.ViewModels.Base;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MultiQueueSimulation.ViewModels
 {
-    public class WelcomeScreenViewModel 
+    public class WelcomeScreenViewModel
     {
-        public ICommand ButtonCommand { get; set; }
+        private bool _canExecute;
+
+        private ICommand _simulateFromFile;
+        public ICommand SimulateFromFile
+        {
+            get
+            {
+                return _simulateFromFile ?? (_simulateFromFile = new CommandHandler(async () => await HandleSimulationFromFile(), _canExecute));
+            }
+        }
+
+        public List<string> ExistingFiles { get; set; }
 
         public WelcomeScreenViewModel()
         {
-            ButtonCommand = new Command(o => MainButtonClick("MainButton"));
+            _canExecute = true;
+            ExistingFiles = new List<string>();
         }
 
-        private void MainButtonClick(object sender)
+        async Task HandleSimulationFromFile()
         {
-            MessageBox.Show("Working");
-        }
-
-        public static void Cumulative_Probability(List<TimeDistribution> Probability)
-        {
-            Probability[0].CummProbability = Probability[0].Probability;
-
-            for (int i = 1; i < Probability.Count; i++)
+            //Fill Exsisting Files
+            //App.InterarrivalDistribution = ReadFromFile(ExistingFiles[0]);
+            App.SimulationSystem.Servers.ForEach(x => 
             {
-                Probability[i].CummProbability = Probability[i].Probability + Probability[i - 1].CummProbability;
+                AddCumulativeProbability(x.TimeDistribution);
+                AddRange(x.TimeDistribution);
+            });
+        }
+        async Task StartSimulation()
+        {
+            //int rand  = //Ali function;
+        }
+        int GetArrivalTime(int rand)
+        {
+            if (rand >=App.SimulationSystem.InterarrivalDistribution.[] )
+            {
+
             }
         }
 
+        //async Task PopulateSystem()
+        //{
+        //    //ReadFromFile();
+        //    foreach (var item in App.SimulationSystem.InterarrivalDistribution)
+        //    {
+        //        AddCumulativeProbability(item);
+        //        AddRange();
+        //    }
+        //}
+        #region Creating  Distributions 
 
-        public static void Range(List<TimeDistribution> range)
+        //*It should be Void with no parameters and Edits ( " App.SimulationSystem " )*
+
+        // you will find all the needed attributes there 
+
+        //public void ReadFromFile()
+        //{
+        //    FileName += ".txt";
+        //    string record;
+        //    string[] fields;
+        //    List<TimeDistribution> InterarrivalDistribution = new List<TimeDistribution>();
+
+        //    FileStream FS = new FileStream(FileName, FileMode.Open);
+        //    StreamReader SR = new StreamReader(FS);
+        //    while (SR.Peek() != -1)
+        //    {
+        //        if (FileName == SR.ReadLine())
+        //        {
+        //            record = SR.ReadLine();
+        //            while (record != "")
+        //            {
+
+        //                fields = record.Split(',');
+
+        //                InterarrivalDistribution.Add(new TimeDistribution()
+        //                {
+        //                    Time = int.Parse(fields[0]),
+        //                    Probability = Convert.ToDecimal(fields[1])
+        //                });
+        //                record = SR.ReadLine();
+        //            }
+        //            break;
+        //        }
+        //    }
+        //    SR.Close();
+
+        //    return InterarrivalDistribution;
+        //} 
+        public void AddCumulativeProbability(List<TimeDistribution> TimeDistribution)
         {
-            range[0].MinRange = 1;
+            TimeDistribution[0].CummProbability = TimeDistribution[0].Probability;
 
-            for (int i = 0; i < range.Count; i++)
+            for (int i = 1; i < TimeDistribution.Count; i++)
             {
-                range[i].MaxRange = (int)((range[i].CummProbability) * 100);
-            }
-            for (int i = 1; i < range.Count; i++)
-            {
-                range[i].MinRange = (range[i - 1].MaxRange + 1);
+                TimeDistribution[i].CummProbability = TimeDistribution[i].Probability + TimeDistribution[i - 1].CummProbability;
             }
         }
+        public void AddRange(List<TimeDistribution> TimeDistribution)
+        {
+            TimeDistribution[0].MinRange = 1;
+
+            for (int i = 0; i < TimeDistribution.Count; i++)
+            {
+                TimeDistribution[i].MaxRange = (int)((TimeDistribution[i].CummProbability) * 100);
+            }
+            for (int i = 1; i < TimeDistribution.Count; i++)
+            {
+                TimeDistribution[i].MinRange = (TimeDistribution[i - 1].MaxRange + 1);
+            }
+        }
+        #endregion
+
+
+
+
+
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
+﻿using MultiQueueModels;
+using MultiQueueTesting;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace MultiQueueSimulation
@@ -13,5 +10,8 @@ namespace MultiQueueSimulation
     /// </summary>
     public partial class App : Application
     {
+        public static SimulationSystem SimulationSystem = new SimulationSystem();
+        public static List<TimeDistribution> InterarrivalDistribution = new List<TimeDistribution>();
+
     }
 }
