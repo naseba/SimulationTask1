@@ -1,15 +1,26 @@
 ﻿using MultiQueueModels;
+using MultiQueueSimulation.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace MultiQueueSimulation.ViewModels
 {
-    public class WelcomeScreenViewModel : INotifyPropertyChanged
+    public class WelcomeScreenViewModel 
     {
+        public ICommand ButtonCommand { get; set; }
+
+        public WelcomeScreenViewModel()
+        {
+            ButtonCommand = new Command(o => MainButtonClick("MainButton"));
+        }
+
+        private void MainButtonClick(object sender)
+        {
+            MessageBox.Show("Working");
+        }
 
         public static void Cumulative_Probability(List<TimeDistribution> Probability)
         {
@@ -34,14 +45,6 @@ namespace MultiQueueSimulation.ViewModels
             {
                 range[i].MinRange = (range[i - 1].MaxRange + 1);
             }
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string p)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(p));
         }
     }
 }
