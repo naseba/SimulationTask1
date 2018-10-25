@@ -8,13 +8,9 @@
         Title="WelcomeScreen" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.3*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="0.3*"/>
-        </Grid.RowDefinitions>
-        <Label Content="Welcome to our Simulated Queue ;)"/>
+        <Button Content="From File" Command="{Binding SimulateFromFile}" />
     </Grid>
 </Window>

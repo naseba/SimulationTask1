@@ -24,8 +24,7 @@ namespace MultiQueueSimulation.Views
         public WelcomeScreen()
         {
             InitializeComponent();
-            vm = new WelcomeScreenViewModel();
-            
+            DataContext = new WelcomeScreenViewModel();
         }
     }
 }
