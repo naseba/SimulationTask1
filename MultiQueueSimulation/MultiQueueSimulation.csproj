@@ -66,6 +66,9 @@
     <Compile Include="ResultsViewModels\ResultsViewModels.cs" />
     <Compile Include="ViewModels\Base\CommandHandler.cs" />
     <Compile Include="ViewModels\WelcomeScreenViewModel.cs" />
+    <Compile Include="Views\ResultsScreen.xaml.cs">
+      <DependentUpon>ResultsScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WelcomeScreen.xaml.cs">
       <DependentUpon>WelcomeScreen.xaml</DependentUpon>
     </Compile>
@@ -104,6 +107,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Views\ResultsScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\WelcomeScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

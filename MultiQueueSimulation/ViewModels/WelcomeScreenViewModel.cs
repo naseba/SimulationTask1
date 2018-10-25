@@ -14,7 +14,7 @@ namespace MultiQueueSimulation.ViewModels
         {
             get
             {
-                return _simulateFromFile ?? (_simulateFromFile = new CommandHandler(async () => await check(), _canExecute));
+                return _simulateFromFile ?? (_simulateFromFile = new CommandHandler(async () => await HandleSimulationFromFile(), _canExecute));
             }
         }
 
