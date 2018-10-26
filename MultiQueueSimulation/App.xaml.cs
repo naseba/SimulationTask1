@@ -11,7 +11,6 @@ namespace MultiQueueSimulation
     public partial class App : Application
     {
         public static SimulationSystem SimulationSystem = new SimulationSystem();
-        public static List<TimeDistribution> InterarrivalDistribution = new List<TimeDistribution>();
         public static int GeneralRandomFunction(int Startindex, int Endindex)
         {
             Random Number = new Random();

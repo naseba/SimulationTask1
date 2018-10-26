@@ -1,7 +1,7 @@
 ﻿using MultiQueueModels;
 using MultiQueueSimulation.ViewModels.Base;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MultiQueueSimulation.ViewModels
@@ -19,53 +19,60 @@ namespace MultiQueueSimulation.ViewModels
             }
         }
 
-        public List<string> ExistingFiles { get; set; }
-
         public WelcomeScreenViewModel()
         {
             _canExecute = true;
             ExistingFiles = new List<string>();
         }
 
-        async Task HandleSimulationFromFile()
+        private void HandleSimulationFromFile()
+        {
+            PopulateSystem();
+            if (App.SimulationSystem.SelectionMethod == Enums.SelectionMethod.HighestPriority)
+            {
+                StartHighestPrioritySimulation();
+            }
+            else if (App.SimulationSystem.SelectionMethod == Enums.SelectionMethod.LeastUtilization)
+            {
+                StartLeastUtilizationSimulation();
+
+            }
+            else if (App.SimulationSystem.SelectionMethod == Enums.SelectionMethod.Random)
+            {
+                StartRandomSimulation();
+            }
+        }
+
+        private void StartRandomSimulation()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void StartLeastUtilizationSimulation()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void StartHighestPrioritySimulation()
+        {
+            throw new NotImplementedException();
+        }
+
+        #region Populating System 
+
+        /// <summary>
+        /// Populates the Pupblic simulation system in the app class with the data in the file then calls starts simultion
+        /// </summary>
+        void PopulateSystem()
         {
             //Fill Exsisting Files
-            //App.InterarrivalDistribution = ReadFromFile(ExistingFiles[0]);
+            //Nosiba's  function 
             App.SimulationSystem.Servers.ForEach(x =>
             {
                 AddCumulativeProbability(x.TimeDistribution);
                 AddRange(x.TimeDistribution);
             });
         }
-        async Task StartSimulation()
-        {
-            int LowestNumber = App.SimulationSystem.InterarrivalDistribution[0].MinRange;
-            int HighestNumber = App.SimulationSystem.InterarrivalDistribution[App.SimulationSystem.InterarrivalDistribution.Count-1].MaxRange;
-            int rand = App.GeneralRandomFunction(LowestNumber,HighestNumber);
-            
-        }
-        int GetArrivalTime(int rand)
-        {
-            foreach (var item in App.InterarrivalDistribution)
-            {
-                if (rand >= item.MinRange && rand <= item.MaxRange)
-                {
-                    return item.Time;
-                }
-            }
-            return 0;
-        }
-
-        //async Task PopulateSystem()
-        //{
-        //    //ReadFromFile();
-        //    foreach (var item in App.SimulationSystem.InterarrivalDistribution)
-        //    {
-        //        AddCumulativeProbability(item);
-        //        AddRange();
-        //    }
-        //}
-        #region Creating  Distributions 
 
         //*It should be Void with no parameters and Edits ( " App.SimulationSystem " )*
 
@@ -104,6 +111,7 @@ namespace MultiQueueSimulation.ViewModels
 
         //    return InterarrivalDistribution;
         //} 
+
         public void AddCumulativeProbability(List<TimeDistribution> TimeDistribution)
         {
             TimeDistribution[0].CummProbability = TimeDistribution[0].Probability;
@@ -113,6 +121,7 @@ namespace MultiQueueSimulation.ViewModels
                 TimeDistribution[i].CummProbability = TimeDistribution[i].Probability + TimeDistribution[i - 1].CummProbability;
             }
         }
+
         public void AddRange(List<TimeDistribution> TimeDistribution)
         {
             TimeDistribution[0].MinRange = 1;
@@ -128,8 +137,22 @@ namespace MultiQueueSimulation.ViewModels
         }
         #endregion
 
-
-
+        /// <summary>
+        /// Gets the required value from distribution
+        /// </summary>
+        /// <param name="rand"></param>
+        /// <param name="Distribution"></param>
+        int GetValueFromDistribution(int rand, List<TimeDistribution> Distribution)
+        {
+            foreach (var item in Distribution)
+            {
+                if (rand >= item.MinRange && rand <= item.MaxRange)
+                {
+                    return item.Time;
+                }
+            }
+            return 0;
+        }
 
 
     }
