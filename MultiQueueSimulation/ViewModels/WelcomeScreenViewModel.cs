@@ -2,6 +2,7 @@
 using MultiQueueSimulation.ViewModels.Base;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Input;
 
 namespace MultiQueueSimulation.ViewModels
@@ -74,43 +75,17 @@ namespace MultiQueueSimulation.ViewModels
             });
         }
 
-        //*It should be Void with no parameters and Edits ( " App.SimulationSystem " )*
-
-        // you will find all the needed attributes there 
-
-        //public void ReadFromFile()
-        //{
-        //    FileName += ".txt";
-        //    string record;
-        //    string[] fields;
-        //    List<TimeDistribution> InterarrivalDistribution = new List<TimeDistribution>();
-
-        //    FileStream FS = new FileStream(FileName, FileMode.Open);
-        //    StreamReader SR = new StreamReader(FS);
-        //    while (SR.Peek() != -1)
-        //    {
-        //        if (FileName == SR.ReadLine())
-        //        {
-        //            record = SR.ReadLine();
-        //            while (record != "")
-        //            {
-
-        //                fields = record.Split(',');
-
-        //                InterarrivalDistribution.Add(new TimeDistribution()
-        //                {
-        //                    Time = int.Parse(fields[0]),
-        //                    Probability = Convert.ToDecimal(fields[1])
-        //                });
-        //                record = SR.ReadLine();
-        //            }
-        //            break;
-        //        }
-        //    }
-        //    SR.Close();
-
-        //    return InterarrivalDistribution;
-        //} 
+        public void ReadFromFile()
+        {
+            List<string> FileLine = new List<string>();
+            FileStream FS = new FileStream("TestCase1", FileMode.Open);
+            StreamReader SR = new StreamReader(FS);
+            while (SR.Peek() != -1)
+            {
+                FileLine.Add(SR.ReadLine());
+            }
+            SR.Close();
+        }
 
         public void AddCumulativeProbability(List<TimeDistribution> TimeDistribution)
         {
@@ -135,6 +110,7 @@ namespace MultiQueueSimulation.ViewModels
                 TimeDistribution[i].MinRange = (TimeDistribution[i - 1].MaxRange + 1);
             }
         }
+
         #endregion
 
         /// <summary>
