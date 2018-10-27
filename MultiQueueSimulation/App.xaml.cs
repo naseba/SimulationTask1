@@ -12,9 +12,10 @@ namespace MultiQueueSimulation
     {
         public static SimulationSystem SimulationSystem = new SimulationSystem();
         public static Queue<char> Que = new Queue<char>();
+        public static Random Number = new Random();
         public static int GeneralRandomFunction(int Startindex, int Endindex)
         {
-            Random Number = new Random();
+            lock(Number)
             return Number.Next(Startindex, Endindex);
         }
     }

@@ -42,7 +42,7 @@ namespace MultiQueueSimulation.ViewModels
             {
                 StartRandomSimulation();
             }
-        }
+        } 
 
         #region Simulations 
 
@@ -178,6 +178,7 @@ namespace MultiQueueSimulation.ViewModels
                     temp.StartTime = temp.ArrivalTime + temp.TimeInQueue;
                     temp.EndTime = temp.ArrivalTime + temp.ServiceTime;
                     temp.AssignedServer.FinishTime = temp.EndTime;
+                    temp.AssignedServer.TotalWorkingTime += temp.ServiceTime;
 
                     App.SimulationSystem.SimulationTable.Add(temp);
                 }
@@ -221,7 +222,7 @@ namespace MultiQueueSimulation.ViewModels
 
         public void ReadFromFile()
         {
-            string FileContent = File.ReadAllText("C:\\Storage\\College\\Task 1\\SimulationTask1\\MultiQueueSimulation\\TestCases\\TestCase1.txt");
+            string FileContent = File.ReadAllText("C:\\Users\\Nour\\Desktop\\MultiQueue System\\SimulationTask1\\MultiQueueSimulation\\TestCases\\TestCase1.txt");
             string[] Lines = FileContent.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
             App.SimulationSystem.NumberOfServers = Convert.ToInt32(Lines[1]);
