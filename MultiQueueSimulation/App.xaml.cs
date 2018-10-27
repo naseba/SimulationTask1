@@ -11,6 +11,7 @@ namespace MultiQueueSimulation
     public partial class App : Application
     {
         public static SimulationSystem SimulationSystem = new SimulationSystem();
+        public static Queue<char> Que = new Queue<char>();
         public static int GeneralRandomFunction(int Startindex, int Endindex)
         {
             Random Number = new Random();
