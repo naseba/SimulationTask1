@@ -18,7 +18,7 @@ namespace MultiQueueSimulation.ViewModels
         {
             get
             {
-                return _simulateFromFile ?? (_simulateFromFile = new CommandHandler(() => PopulateSystem(), _canExecute));
+                return _simulateFromFile ?? (_simulateFromFile = new CommandHandler(() => HandleSimulationFromFile(), _canExecute));
             }
         }
 
@@ -37,13 +37,14 @@ namespace MultiQueueSimulation.ViewModels
             else if (App.SimulationSystem.SelectionMethod == Enums.SelectionMethod.LeastUtilization)
             {
                 StartLeastUtilizationSimulation();
-
             }
             else if (App.SimulationSystem.SelectionMethod == Enums.SelectionMethod.Random)
             {
                 StartRandomSimulation();
             }
         }
+
+        #region Simulations 
 
         private void StartRandomSimulation()
         {
@@ -53,23 +54,27 @@ namespace MultiQueueSimulation.ViewModels
                 {
                     SimulationCase temp = new SimulationCase();
 
-                    temp.CustomerNumber = i;
-                    temp.RandomInterArrival = App.GeneralRandomFunction(1, 100);
-                    if (i == 1)
+                    temp.CustomerNumber = i + 1;
+                    if (i == 0)
                     {
                         temp.InterArrival = 0;
                         temp.ArrivalTime = 0;
                     }
                     else
                     {
-                        temp.ArrivalTime += temp.InterArrival;
+                        temp.RandomInterArrival = App.GeneralRandomFunction(1, 100);
                         temp.InterArrival = GetValueFromDistribution(temp.RandomInterArrival, App.SimulationSystem.InterarrivalDistribution);
+                        temp.ArrivalTime += temp.InterArrival + App.SimulationSystem.SimulationTable[i - 1].ArrivalTime;
                     }
                     foreach (var item in App.SimulationSystem.Servers)
                     {
                         if (item.FinishTime > temp.ArrivalTime)
                         {
-                            item.availabel = false;
+                            item.IsAvailable = false;
+                        }
+                        else if (item.FinishTime <= temp.ArrivalTime)
+                        {
+                            item.IsAvailable = true;
                         }
                     }
                     temp.RandomService = App.GeneralRandomFunction(1, 100);
@@ -77,17 +82,17 @@ namespace MultiQueueSimulation.ViewModels
                     if (AssignedServer == null)
                     {
                         int min = App.SimulationSystem.Servers[0].FinishTime;
-                        int index = 0;
+                        int ind = 0;
                         for (int q = 0; q < App.SimulationSystem.Servers.Count; q++)
                         {
                             if (App.SimulationSystem.Servers[q].FinishTime < min)
                             {
                                 min = App.SimulationSystem.Servers[q].FinishTime;
-                                index = q;
+                                ind = q;
                             }
                         }
                         temp.TimeInQueue = min - temp.ArrivalTime;
-                        temp.AssignedServer = App.SimulationSystem.Servers[index];
+                        temp.AssignedServer = App.SimulationSystem.Servers[ind];
                     }
                     else
                     {
@@ -95,14 +100,12 @@ namespace MultiQueueSimulation.ViewModels
                         temp.AssignedServer = App.SimulationSystem.Servers[index];
                         temp.TimeInQueue = 0;
                     }
-                    temp.ServiceTime = GetValueFromDistribution(temp.RandomService, AssignedServer.TimeDistribution);
-                    if (App.Que.Count == 0)
-                    {
-                        temp.AssignedServer = AssignedServer;
-                        temp.StartTime = temp.ArrivalTime;
-                        temp.EndTime = temp.ArrivalTime + temp.ServiceTime;
-                        temp.AssignedServer.FinishTime = temp.EndTime;
-                    }
+                    temp.ServiceTime = GetValueFromDistribution(temp.RandomService, temp.AssignedServer.TimeDistribution);
+
+                    temp.StartTime = temp.ArrivalTime + temp.TimeInQueue;
+                    temp.EndTime = temp.ArrivalTime + temp.ServiceTime;
+                    temp.AssignedServer.FinishTime = temp.EndTime;
+
                     App.SimulationSystem.SimulationTable.Add(temp);
                 }
             }
@@ -119,8 +122,72 @@ namespace MultiQueueSimulation.ViewModels
 
         private void StartHighestPrioritySimulation()
         {
-            throw new NotImplementedException();
+            if (App.SimulationSystem.StoppingCriteria == Enums.StoppingCriteria.NumberOfCustomers)
+            {
+                for (int i = 0; i < App.SimulationSystem.StoppingNumber; i++)
+                {
+                    SimulationCase temp = new SimulationCase();
+
+                    temp.CustomerNumber = i + 1;
+                    if (i == 0)
+                    {
+                        temp.InterArrival = 0;
+                        temp.ArrivalTime = 0;
+                    }
+                    else
+                    {
+                        temp.RandomInterArrival = App.GeneralRandomFunction(1, 100);
+                        temp.InterArrival = GetValueFromDistribution(temp.RandomInterArrival, App.SimulationSystem.InterarrivalDistribution);
+                        temp.ArrivalTime += temp.InterArrival + App.SimulationSystem.SimulationTable[i - 1].ArrivalTime;
+                    }
+                    foreach (var item in App.SimulationSystem.Servers)
+                    {
+                        if (item.FinishTime > temp.ArrivalTime)
+                        {
+                            item.IsAvailable = false;
+                        }
+                        else if (item.FinishTime <= temp.ArrivalTime)
+                        {
+                            item.IsAvailable = true;
+                        }
+                    }
+                    temp.RandomService = App.GeneralRandomFunction(1, 100);
+                    int index = HighestPriorityServerSelect(App.SimulationSystem.Servers);
+                    if (index == -1)
+                    {
+                        int min = App.SimulationSystem.Servers[0].FinishTime;
+                        int ind = 0;
+                        for (int q = 0; q < App.SimulationSystem.Servers.Count; q++)
+                        {
+                            if (App.SimulationSystem.Servers[q].FinishTime < min)
+                            {
+                                min = App.SimulationSystem.Servers[q].FinishTime;
+                                ind = q;
+                            }
+                        }
+                        temp.TimeInQueue = min - temp.ArrivalTime;
+                        temp.AssignedServer = App.SimulationSystem.Servers[ind];
+                    }
+                    else
+                    {
+                        temp.AssignedServer = App.SimulationSystem.Servers[index];
+                        temp.TimeInQueue = 0;
+                    }
+                    temp.ServiceTime = GetValueFromDistribution(temp.RandomService, temp.AssignedServer.TimeDistribution);
+
+                    temp.StartTime = temp.ArrivalTime + temp.TimeInQueue;
+                    temp.EndTime = temp.ArrivalTime + temp.ServiceTime;
+                    temp.AssignedServer.FinishTime = temp.EndTime;
+
+                    App.SimulationSystem.SimulationTable.Add(temp);
+                }
+            }
+            else if (App.SimulationSystem.StoppingCriteria == Enums.StoppingCriteria.SimulationEndTime)
+            {
+
+            }
         }
+        #endregion
 
         #region Populating System 
 
@@ -130,11 +197,16 @@ namespace MultiQueueSimulation.ViewModels
         void PopulateSystem()
         {
             ReadFromFile();
+
+            AddCumulativeProbability(App.SimulationSystem.InterarrivalDistribution);
+            AddRange(App.SimulationSystem.InterarrivalDistribution);
+
             App.SimulationSystem.Servers.ForEach(x =>
             {
                 AddCumulativeProbability(x.TimeDistribution);
                 AddRange(x.TimeDistribution);
             });
+
             Thread t = new Thread(new ThreadStart(Populateroc));
             t.Start();
             Thread.Sleep(150);
@@ -242,7 +314,7 @@ namespace MultiQueueSimulation.ViewModels
             do
             {
                 RandomNumber = RandomIndex.Next(0, Servers.Count);
-                if (Servers[RandomNumber].availabel == false)
+                if (Servers[RandomNumber].IsAvailable == false)
                 {
                     AvilableServers.RemoveAt(RandomNumber);
                 }
@@ -250,6 +322,20 @@ namespace MultiQueueSimulation.ViewModels
                     return AvilableServers[RandomNumber];
             } while (AvilableServers.Count != 0);
             return null;
+        }
+        int HighestPriorityServerSelect(List<Server> servers)
+        {
+            int serverIndex = -1;
+            for (int i = 0; i < servers.Count; i++)
+            {
+                if (servers[i].IsAvailable)
+                {
+                    serverIndex = i;
+                    servers[i].IsAvailable = false;
+                    break;
+                }
+            }
+            return serverIndex;
         }
 
         #endregion
@@ -270,6 +356,8 @@ namespace MultiQueueSimulation.ViewModels
             }
             return 0;
         }
+
+
 
     }
 }
