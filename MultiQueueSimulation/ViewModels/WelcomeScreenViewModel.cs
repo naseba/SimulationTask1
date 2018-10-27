@@ -45,7 +45,6 @@ namespace MultiQueueSimulation.ViewModels
         }
 
         #region Simulations 
-
         private void StartRandomSimulation()
         {
             if (App.SimulationSystem.StoppingCriteria == Enums.StoppingCriteria.NumberOfCustomers)
@@ -260,7 +259,6 @@ namespace MultiQueueSimulation.ViewModels
         #endregion
 
         #region Populating System 
-
         /// <summary>
         /// Populates the Public simulation system in the app class with the data in the file then calls starts simultion
         /// </summary>
@@ -370,11 +368,9 @@ namespace MultiQueueSimulation.ViewModels
                 TimeDistribution[i].MinRange = (TimeDistribution[i - 1].MaxRange + 1);
             }
         }
-
         #endregion
 
         #region Server Selction
-
         Server RandomServerSelect(List<Server> Servers)
         {
             List<Server> AvilableServers = new List<Server>();
@@ -447,8 +443,5 @@ namespace MultiQueueSimulation.ViewModels
             }
             return 0;
         }
-
-
-
     }
 }
