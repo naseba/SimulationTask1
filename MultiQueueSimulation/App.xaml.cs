@@ -16,7 +16,7 @@ namespace MultiQueueSimulation
         public static int GeneralRandomFunction(int Startindex, int Endindex)
         {
             lock(Number)
-            return Number.Next(Startindex, Endindex);
+            return Number.Next(Startindex, Endindex-1);
         }
     }
 }

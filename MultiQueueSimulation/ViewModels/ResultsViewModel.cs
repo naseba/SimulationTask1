@@ -1,7 +1,9 @@
 ﻿using MultiQueueModels;
+using MultiQueueTesting;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 
 namespace MultiQueueSimulation.ViewModels
 {
@@ -13,7 +15,7 @@ namespace MultiQueueSimulation.ViewModels
         public int TotalRunTime { get; set; }
         public int TotalIdleTime { get; set; }
         public int TotalServiceTime { get; set; }
-        public int TotalCustomerWaitTime { get; set;}
+        public int TotalCustomerWaitTime { get; set; }
         public int CustomersWhoWaited { get; set; }
         #endregion
         public ResultsViewModel()
@@ -21,16 +23,20 @@ namespace MultiQueueSimulation.ViewModels
             VisualSimulationTable = new ObservableCollection<SimulationCase>(App.SimulationSystem.SimulationTable as List<SimulationCase>);
             TotalNumberOfCustomers = App.SimulationSystem.StoppingNumber;
             TotalRunTime = App.SimulationSystem.SimulationTable.ElementAt(TotalNumberOfCustomers).EndTime;
+            CustomersWhoWaited = ComputeNumberOfCustomersWhoWaited();
+            TotalCustomerWaitTime = ComputeTotalCustomerWaitTime();
+            App.SimulationSystem.PerformanceMeasures.AverageWaitingTime = AverageWaitingTime();
+            App.SimulationSystem.PerformanceMeasures.WaitingProbability = PrababilityOfWaiting();
             ComputeResults();
             TotalIdleTime = TotalRunTime - TotalServiceTime;
         }
         private void ComputeResults()
         {
-            //TotalServiceTime = ComputeTotalServiceTime();
-            TotalCustomerWaitTime = ComputeTotalCustomerWaitTime();
-            CustomersWhoWaited = ComputeNumberOfCustomersWhoWaited();
+            ServerPreformance();
+            string testResult = TestingManager.Test(App.SimulationSystem, Constants.FileNames.TestCase1);
+            MessageBox.Show(testResult);
         }
-        void ComputeTotalServiceTime()
+        void ServerPreformance()
         {
             int TotalNumberOfServers = App.SimulationSystem.NumberOfServers;
             for (int i = 0; i < TotalNumberOfServers; i++)
@@ -38,7 +44,7 @@ namespace MultiQueueSimulation.ViewModels
                 TotalServiceTime = App.SimulationSystem.Servers.ElementAt(i).TotalWorkingTime;
                 App.SimulationSystem.Servers.ElementAt(i).Utilization = TotalServiceTime / TotalRunTime;
                 App.SimulationSystem.Servers.ElementAt(i).AverageServiceTime = TotalServiceTime / TotalNumberOfCustomers;
-                App.SimulationSystem.Servers.ElementAt(i).IdleProbability= TotalIdleTime / TotalRunTime;
+                App.SimulationSystem.Servers.ElementAt(i).IdleProbability = TotalIdleTime / TotalRunTime;
             }
         }
         int ComputeTotalCustomerWaitTime()
@@ -50,7 +56,7 @@ namespace MultiQueueSimulation.ViewModels
             }
             return TimeWaited;
         }
-         int ComputeNumberOfCustomersWhoWaited()
+        int ComputeNumberOfCustomersWhoWaited()
         {
             int CustomersWaited = 0;
             for (int i = 0; i < TotalNumberOfCustomers; i++)
@@ -67,12 +73,14 @@ namespace MultiQueueSimulation.ViewModels
         //public float Utilization = TotalServiceTime() / TotalRunTime;
 
         ///////////System OutPut Performance Measures//////
-        public float AverageWaitingTime() {
-            return  TotalCustomerWaitTime / TotalNumberOfCustomers;
+        public decimal AverageWaitingTime()
+        {
+            return TotalCustomerWaitTime / TotalNumberOfCustomers;
         }
-        public float PrababilityOfWaiting() {
-            return CustomersWhoWaited / TotalNumberOfCustomers; 
-        } 
+        public decimal PrababilityOfWaiting()
+        {
+            return CustomersWhoWaited / TotalNumberOfCustomers;
+        }
 
     }
 }

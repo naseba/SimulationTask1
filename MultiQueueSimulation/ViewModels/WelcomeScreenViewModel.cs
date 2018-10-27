@@ -1,5 +1,6 @@
 ﻿using MultiQueueModels;
 using MultiQueueSimulation.ViewModels.Base;
+using MultiQueueTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,6 +59,7 @@ namespace MultiQueueSimulation.ViewModels
                     {
                         temp.InterArrival = 0;
                         temp.ArrivalTime = 0;
+                        temp.RandomInterArrival = App.GeneralRandomFunction(1, 100);
                     }
                     else
                     {
@@ -102,8 +104,9 @@ namespace MultiQueueSimulation.ViewModels
                     temp.ServiceTime = GetValueFromDistribution(temp.RandomService, temp.AssignedServer.TimeDistribution);
 
                     temp.StartTime = temp.ArrivalTime + temp.TimeInQueue;
-                    temp.EndTime = temp.ArrivalTime + temp.ServiceTime;
+                    temp.EndTime = temp.StartTime + temp.ServiceTime;
                     temp.AssignedServer.FinishTime = temp.EndTime;
+                    temp.AssignedServer.TotalWorkingTime += temp.ServiceTime;
 
                     App.SimulationSystem.SimulationTable.Add(temp);
                 }
@@ -127,6 +130,7 @@ namespace MultiQueueSimulation.ViewModels
                     {
                         temp.InterArrival = 0;
                         temp.ArrivalTime = 0;
+                        temp.RandomInterArrival = App.GeneralRandomFunction(1, 100);
                     }
                     else
                     {
@@ -171,16 +175,17 @@ namespace MultiQueueSimulation.ViewModels
                         temp.AssignedServer = App.SimulationSystem.Servers[index];
                         temp.TimeInQueue = 0;
                     }
-
                     temp.ServiceTime = GetValueFromDistribution(temp.RandomService, temp.AssignedServer.TimeDistribution);
 
                     temp.StartTime = temp.ArrivalTime + temp.TimeInQueue;
-                    temp.EndTime = temp.ArrivalTime + temp.ServiceTime;
+                    temp.EndTime = temp.StartTime + temp.ServiceTime;
                     temp.AssignedServer.FinishTime = temp.EndTime;
                     temp.AssignedServer.TotalWorkingTime += temp.ServiceTime;
 
                     App.SimulationSystem.SimulationTable.Add(temp);
                 }
+                string testResult = TestingManager.Test(App.SimulationSystem, Constants.FileNames.TestCase1);
+                MessageBox.Show(testResult);
             }
             else if (App.SimulationSystem.StoppingCriteria == Enums.StoppingCriteria.SimulationEndTime)
             {
@@ -201,6 +206,7 @@ namespace MultiQueueSimulation.ViewModels
                     {
                         temp.InterArrival = 0;
                         temp.ArrivalTime = 0;
+                        temp.RandomInterArrival = App.GeneralRandomFunction(1, 100);
                     }
                     else
                     {
@@ -244,7 +250,7 @@ namespace MultiQueueSimulation.ViewModels
                     temp.ServiceTime = GetValueFromDistribution(temp.RandomService, temp.AssignedServer.TimeDistribution);
 
                     temp.StartTime = temp.ArrivalTime + temp.TimeInQueue;
-                    temp.EndTime = temp.ArrivalTime + temp.ServiceTime;
+                    temp.EndTime = temp.StartTime + temp.ServiceTime;
                     temp.AssignedServer.FinishTime = temp.EndTime;
                     temp.AssignedServer.TotalWorkingTime += temp.ServiceTime;
 
