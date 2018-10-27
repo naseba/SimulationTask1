@@ -82,6 +82,7 @@ namespace MultiQueueSimulation.ViewModels
                     Server AssignedServer = RandomServerSelect(App.SimulationSystem.Servers);
                     if (AssignedServer == null)
                     {
+                        App.Que++;
                         int min = App.SimulationSystem.Servers[0].FinishTime;
                         int ind = 0;
                         for (int q = 0; q < App.SimulationSystem.Servers.Count; q++)
@@ -157,6 +158,7 @@ namespace MultiQueueSimulation.ViewModels
 
                     if (index == -1)
                     {
+                        App.Que++;
                         int min = App.SimulationSystem.Servers[0].FinishTime;
                         int ind = 0;
                         for (int q = 0; q < App.SimulationSystem.Servers.Count; q++)
@@ -229,6 +231,7 @@ namespace MultiQueueSimulation.ViewModels
                     int index = HighestPriorityServerSelect(App.SimulationSystem.Servers);
                     if (index == -1)
                     {
+                        App.Que++;
                         int min = App.SimulationSystem.Servers[0].FinishTime;
                         int ind = 0;
                         for (int q = 0; q < App.SimulationSystem.Servers.Count; q++)
