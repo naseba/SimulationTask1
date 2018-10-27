@@ -1,18 +1,24 @@
-﻿using System;
+﻿using MultiQueueModels;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MultiQueueSimulation.ViewModels
 {
     class ResultsViewModel
     {
+        #region Properties
+        public ObservableCollection<SimulationCase> VisualSimulationTable { get; set; }
         public int TotalNumberOfCustomers { get; set; }
         public int TotalRunTime { get; set; }
         public int TotalIdleTime { get; set; }
         public int TotalServiceTime { get; set; }
         public int TotalCustomerWaitTime { get; set; }
         public int CustomersWhoWaited { get; set; }
+        #endregion
         public ResultsViewModel()
         {
+            VisualSimulationTable = new ObservableCollection<SimulationCase>(App.SimulationSystem.SimulationTable as List<SimulationCase>);
             TotalNumberOfCustomers = App.SimulationSystem.StoppingNumber;
             TotalRunTime = App.SimulationSystem.SimulationTable.ElementAt(TotalNumberOfCustomers).EndTime;
             ComputeResults();
@@ -31,7 +37,6 @@ namespace MultiQueueSimulation.ViewModels
             {
                 Service_Time += App.SimulationSystem.SimulationTable.ElementAt(i).ServiceTime;
             }
-
             return Service_Time;
         }
         int ComputeTotalCustomerWaitTime()
@@ -41,7 +46,6 @@ namespace MultiQueueSimulation.ViewModels
             {
                 TimeWaited += App.SimulationSystem.SimulationTable.ElementAt(i).TimeInQueue;
             }
-
             return TimeWaited;
         }
         int ComputeNumberOfCustomersWhoWaited()

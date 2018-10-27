@@ -221,7 +221,7 @@ namespace MultiQueueSimulation.ViewModels
 
         public void ReadFromFile()
         {
-            string FileContent = File.ReadAllText("C:\\Storage\\College\\Task 1\\SimulationTask1\\MultiQueueSimulation\\TestCases\\TestCase2.txt");
+            string FileContent = File.ReadAllText("C:\\Storage\\College\\Task 1\\SimulationTask1\\MultiQueueSimulation\\TestCases\\TestCase1.txt");
             string[] Lines = FileContent.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
             App.SimulationSystem.NumberOfServers = Convert.ToInt32(Lines[1]);
