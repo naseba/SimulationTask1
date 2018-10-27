@@ -42,7 +42,7 @@ namespace MultiQueueSimulation.ViewModels
             {
                 StartRandomSimulation();
             }
-        } 
+        }
 
         #region Simulations 
 
@@ -117,8 +117,76 @@ namespace MultiQueueSimulation.ViewModels
 
         private void StartLeastUtilizationSimulation()
         {
+            if (App.SimulationSystem.StoppingCriteria == Enums.StoppingCriteria.NumberOfCustomers)
+            {
+                for (int i = 0; i < App.SimulationSystem.StoppingNumber; i++)
+                {
+                    SimulationCase temp = new SimulationCase();
 
-            throw new NotImplementedException();
+                    temp.CustomerNumber = i + 1;
+                    if (i == 0)
+                    {
+                        temp.InterArrival = 0;
+                        temp.ArrivalTime = 0;
+                    }
+                    else
+                    {
+                        temp.RandomInterArrival = App.GeneralRandomFunction(1, 100);
+                        temp.InterArrival = GetValueFromDistribution(temp.RandomInterArrival, App.SimulationSystem.InterarrivalDistribution);
+                        temp.ArrivalTime += temp.InterArrival + App.SimulationSystem.SimulationTable[i - 1].ArrivalTime;
+                    }
+
+                    foreach (var item in App.SimulationSystem.Servers)
+                    {
+                        if (item.FinishTime > temp.ArrivalTime)
+                        {
+                            item.IsAvailable = false;
+                        }
+                        else if (item.FinishTime <= temp.ArrivalTime)
+                        {
+                            item.IsAvailable = true;
+                        }
+                    }
+
+                    temp.RandomService = App.GeneralRandomFunction(1, 100);
+
+                    int index = LeastUtilizationServerSelect(App.SimulationSystem.Servers);
+
+                    if (index == -1)
+                    {
+                        int min = App.SimulationSystem.Servers[0].FinishTime;
+                        int ind = 0;
+                        for (int q = 0; q < App.SimulationSystem.Servers.Count; q++)
+                        {
+                            if (App.SimulationSystem.Servers[q].FinishTime < min)
+                            {
+                                min = App.SimulationSystem.Servers[q].FinishTime;
+                                ind = q;
+                            }
+                        }
+                        temp.TimeInQueue = min - temp.ArrivalTime;
+                        temp.AssignedServer = App.SimulationSystem.Servers[ind];
+                    }
+                    else
+                    {
+                        temp.AssignedServer = App.SimulationSystem.Servers[index];
+                        temp.TimeInQueue = 0;
+                    }
+
+                    temp.ServiceTime = GetValueFromDistribution(temp.RandomService, temp.AssignedServer.TimeDistribution);
+
+                    temp.StartTime = temp.ArrivalTime + temp.TimeInQueue;
+                    temp.EndTime = temp.ArrivalTime + temp.ServiceTime;
+                    temp.AssignedServer.FinishTime = temp.EndTime;
+                    temp.AssignedServer.TotalWorkingTime += temp.ServiceTime;
+
+                    App.SimulationSystem.SimulationTable.Add(temp);
+                }
+            }
+            else if (App.SimulationSystem.StoppingCriteria == Enums.StoppingCriteria.SimulationEndTime)
+            {
+
+            }
         }
 
         private void StartHighestPrioritySimulation()
@@ -342,14 +410,24 @@ namespace MultiQueueSimulation.ViewModels
         int LeastUtilizationServerSelect(List<Server> servers)
         {
             int Leastindex = 0;
+            bool found = false;
+
             for (int i = 1; i < servers.Count; i++)
             {
                 if (servers[Leastindex].TotalWorkingTime > servers[i].TotalWorkingTime)
                 {
                     Leastindex = i;
+                    found = true;
                 }
             }
-            return Leastindex;
+            if (found)
+            {
+                return Leastindex;
+            }
+            else
+            {
+                return -1;
+            }
         }
         #endregion
 
