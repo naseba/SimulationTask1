@@ -117,6 +117,7 @@ namespace MultiQueueSimulation.ViewModels
 
         private void StartLeastUtilizationSimulation()
         {
+
             throw new NotImplementedException();
         }
 
@@ -338,7 +339,18 @@ namespace MultiQueueSimulation.ViewModels
             }
             return serverIndex;
         }
-
+        int LeastUtilizationServerSelect(List<Server> servers)
+        {
+            int Leastindex = 0;
+            for (int i = 1; i < servers.Count; i++)
+            {
+                if (servers[Leastindex].TotalWorkingTime > servers[i].TotalWorkingTime)
+                {
+                    Leastindex = i;
+                }
+            }
+            return Leastindex;
+        }
         #endregion
 
         /// <summary>
